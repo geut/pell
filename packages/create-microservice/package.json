@@ -1,0 +1,25 @@
+{
+  "name": "create-microservice",
+  "version": "1.0.0",
+  "description": "Create P2P based microservices with no configuration",
+  "bin": {
+    "create-microservice": "./index.js"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "keywords": [
+    "p2p",
+    "generator",
+    "microservices"
+  ],
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "cross-spawn": "^4.0.0",
+    "minimist": "^1.2.0",
+    "path-exists": "^2.1.0",
+    "semver": "^5.0.3"
+  },
+  "author": "Diego Paez <diego@geutstudio.com>",
+  "license": "ISC"
+}
