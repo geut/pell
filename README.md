@@ -4,14 +4,14 @@ Create P2P based microservices with no configuration
 
 ## tl;dr
 
-``sh
+```sh
 npm install -g geut@create-microservice
 
 create-microservice my-service
 cd my-service/
 npm start
 
-``
+```
 
 *Note*: Default port is 3000. If is in use, the generator will lookup for a different one.
 
@@ -21,9 +21,9 @@ npm start
 
 Install it once globally:
 
-``sh
+```sh
 npm install -g pell@create-microservice
-``
+```
 
 **You’ll need to have Node >= 6 on your machine**.
 
@@ -34,17 +34,22 @@ npm install -g pell@create-microservice
 
 To create a new microservice, run:
 
-``sh
+```sh
 create-microservice my-service
 cd my-service
-``
+```
 
 It will create a directory called `my-service` inside the current folder.<br>
 Inside that directory, it will generate the initial project structure and install the transitive dependencies:
 
-``
-
-``
+```
+.
+├── index.js
+├── node_modules
+├── package.json
+├── README.md
+└── server.js
+```
 
 No configuration or complicated folder structures, just the files you need to build your microservice.<br>
 Once the installation is done, you can run some commands inside the project folder:
@@ -93,14 +98,6 @@ All of them are transitive dependencies of the provided npm package.
 ## Contributing
 
 TBD
-
-## Acknowledgements
-
-We are grateful to the authors of existing related projects for their ideas and collaboration:
-
-* [@eanplatter](https://github.com/eanplatter)
-* [@insin](https://github.com/insin)
-* [@mxstbr](https://github.com/mxstbr)
 
 ## Inspiration
 
