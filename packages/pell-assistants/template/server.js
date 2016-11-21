@@ -11,8 +11,8 @@ const HapiConfig = {};
 
 HapiConfig.port = 3003;
 
-if (Package.micro.label){
-    HapiConfig.labels = [Package.micro.label];
+if (Package.pell.label){
+    HapiConfig.labels = [Package.pell.label];
 }
 
 Server.connection(HapiConfig);
@@ -38,9 +38,9 @@ Server.register([
     {
         register: require('pell-assistants/extensions/swarm'),
         options: {
-            id: Pkg.micro.name,
+            id: Pkg.pell.name,
             dns: {
-                domain: (Pkg.micro.dns && Pkg.micro.dns.domain) ? Pkg.micro.dns.domain : ''
+                domain: (Pkg.pell.dns && Pkg.pell.dns.domain) ? Pkg.pell.dns.domain : ''
             },
             dht: {
                 bootstrap: ['localhost:20001']
@@ -53,7 +53,7 @@ Server.register([
     {
         register: require('pell-assistants/extensions/discovery'),
         options: {
-            id: Crypto.createHash('sha1').update(Pkg.micro.name).digest().toString(),
+            id: Crypto.createHash('sha1').update(Pkg.pell.name).digest().toString(),
             healthChannel: Crypto.createHash('sha1').update('mservice:all:status:health:*').digest().toString()
         }
     },

@@ -78,21 +78,33 @@ prompt(
   files.forEach(verifyAbsent);
 
   // Copy the files over
-  folders.forEach(function(folder) {
-    Fs.mkdirSync(Path.join(appPath, folder))
+  folders.forEach(function (folder) {
+
+    Fs.mkdirSync(Path.join(appPath, folder));
   });
 
   console.log();
+  console.log(cyan('Copying files into ' + appPath));
+
+  files.forEach(function (file) {
+
+    console.log('  Adding ' + cyan(file) + ' to the project');
+    let content = Fs.readFileSync(Path.join(ownPath, file), 'utf8');
+
+    Fs.writeFileSync(Path.join(appPath, file), content);
+  });
+  console.log();
+
+  console.log('Creating packages');
 
   var ownPackage = require(Path.join(ownPath, 'package.json'));
   var appPackage = require(Path.join(appPath, 'package.json'));
-  var babelConfig = JSON.parse(Fs.readFileSync(Path.join(ownPath, '.babelrc'), 'utf8'));
-  var eslintConfig = JSON.parse(Fs.readFileSync(Path.join(ownPath, '.eslintrc'), 'utf8'));
 
   console.log(cyan('Updating the dependencies'));
   var ownPackageName = ownPackage.name;
   console.log('  Removing ' + cyan(ownPackageName) + ' from devDependencies');
   delete appPackage.devDependencies[ownPackageName];
+  delete appPackage.dependencies[ownPackageName];
 
   Object.keys(ownPackage.dependencies).forEach(function (key) {
     console.log('  Adding ' + cyan(key) + ' to devDependencies');
@@ -100,7 +112,9 @@ prompt(
   });
   console.log();
   console.log(cyan('Updating the scripts'));
+  // remove eject task
   delete appPackage.scripts['eject'];
+  // replace pell-assistants for local npm-scripts-like tasks
   Object.keys(appPackage.scripts).forEach(function (key) {
     appPackage.scripts[key] = appPackage.scripts[key]
       .replace(/pell-assistants (\w+)/g, 'node scripts/$1.js');
@@ -111,6 +125,13 @@ prompt(
       cyan('"node scripts/' + key + '.js"')
     );
   });
+
+  console.log();
+  console.log(cyan('Pointing pell-assistants require\'d references to local extensions folder'));
+  const serverFilePath = Path.join(appPath, 'server.js');
+  let serverFile = Fs.readFileSync(serverFilePath, 'utf-8');
+  serverFile = serverFile.replace(/pell-assistants\/(\w+)/g, './$1');
+  Fs.writeFileSync(serverFilePath, serverFile);
 
   console.log();
   console.log(cyan('Configuring package.json'));
@@ -127,4 +148,4 @@ prompt(
   console.log(green('Ejected successfully!'));
   console.log();
 
-})
+});

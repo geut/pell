@@ -34,7 +34,7 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
     // name is what this exposed to the world, same goes for deps
     // name is required.
     // name > mservice:company:offer
-    appPackage.micro = {
+    appPackage.pell = {
         name: 'mservice:geut:world'
     };
 
@@ -93,10 +93,10 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
         // This needs to handle an undefined originalDirectory for
         // backward compatibility with old global-cli's.
         let cdpath;
-        if (originalDirectory &&
-            Path.join(originalDirectory, appName) === appPath) {
+        if (originalDirectory && Path.join(originalDirectory, appName) === appPath) {
             cdpath = appName;
-        } else {
+        }
+        else {
             cdpath = appPath;
         }
 

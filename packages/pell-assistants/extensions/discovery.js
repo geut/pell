@@ -10,7 +10,7 @@ const FindKey = require('lodash.findkey');
 const Internals = {};
 
 Internals.defaults = {
-    id: Crypto.createHash('sha1').update(Pkg.micro.name).digest().toString(),
+    id: Crypto.createHash('sha1').update(Pkg.pell.name).digest().toString(),
     healthChannel: Crypto.createHash('sha1').update('mservice:all:status:health:*').digest().toString(),
     depSet: new Set(),
     depMap: new Map(),
@@ -22,24 +22,24 @@ const Discovery = function (server, options, next){
     // NOTE: emit logs using the request/server logs hapi built-ins
     server.app.swarm.on('connection', (connection, info) => {
 
-        console.log(`${Pkg.micro.name} :: connection info >> ${info}`);
-        console.log(`${Pkg.micro.name} :: info id >> ${info.id.toString()}`);
+        console.log(`${Pkg.pell.name} :: connection info >> ${info}`);
+        console.log(`${Pkg.pell.name} :: info id >> ${info.id.toString()}`);
         const filter = Array.from(Internals.defaults.depSet).filter((item) => {
 
             return item.toString() === info.id.toString();
         });
 
-        console.log(`${Pkg.micro.name} :: filter >> ${filter}`);
+        console.log(`${Pkg.pell.name} :: filter >> ${filter}`);
 
         if (info.initiator && Internals.defaults.depSet.has(info.id.toString())){
 
-            console.log(`${Pkg.micro.name} :: new dep founded!`);
+            console.log(`${Pkg.pell.name} :: new dep founded!`);
             // update discovered services map
-            const key = FindKey(Pkg.micro.dependencies, info.id.toString());
+            const key = FindKey(Pkg.pell.dependencies, info.id.toString());
             Internals.defaults.depMap.set(key, info.id);
             Internals.defaults.discovered.set(info.id.toString(), { host: info.host, port: info.port });
             server.app.discovered = Internals.defaults.discovered;
-            console.log(`${Pkg.micro.name} :: server.app.discovered >> ${server.app.discovered}`);
+            console.log(`${Pkg.pell.name} :: server.app.discovered >> ${server.app.discovered}`);
         }
     });
 
@@ -49,16 +49,16 @@ const Discovery = function (server, options, next){
     // everybody must join to the health channel
     server.app.swarm.join(options.healthChannel);
 
-    if (Pkg.micro.dependencies){
+    if (Pkg.pell.dependencies){
         // join the channel you want to
-        // channel -1---n- microservice
-        Object.keys(Pkg.micro.dependencies).forEach((key) => {
+        // channel -1---n- pellservice
+        Object.keys(Pkg.pell.dependencies).forEach((key) => {
 
-            const dep = Pkg.micro.dependencies[key];
-            console.log(`${Pkg.micro.name} dep key >> ${key}`);
+            const dep = Pkg.pell.dependencies[key];
+            console.log(`${Pkg.pell.name} dep key >> ${key}`);
             const hash = dep;
             server.app.swarm.join(hash);
-            console.log(`${Pkg.micro.name} :: requesting dep: ${hash.toString('hex')}`);
+            console.log(`${Pkg.pell.name} :: requesting dep: ${hash.toString('hex')}`);
             Internals.defaults.depSet.add(new Buffer(hash).toString());
             Internals.defaults.depMap.set(key, new Buffer(hash).toString());
         });

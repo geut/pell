@@ -11,7 +11,7 @@ Internals.stats.name = Pkg.name;
 
 Internals.stats.version = Pkg.version;
 
-Internals.stats.micro = Pkg.micro;
+Internals.stats.pell = Pkg.pell;
 
 Internals.stats.pid = Process.pid;
 
@@ -52,7 +52,7 @@ const Health = function (server, options, next){
             return reply({
                 name: Internals.stats.name,
                 version: Internals.stats.version,
-                micro: Internals.stats.micro,
+                pell: Internals.stats.pell,
                 pid: Internals.stats.pid,
                 cpu: Internals.stats.cpu(),
                 mem: Internals.stats.mem()
