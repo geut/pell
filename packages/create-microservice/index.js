@@ -74,7 +74,7 @@ function run(root, appName, version, verbose, originalDirectory) {
   var args = [
     'install',
     verbose && '--verbose',
-    '--save-dev',
+    '--save',
     '--save-exact',
     installPackage,
   ].filter(function(e) { return e; });
@@ -150,7 +150,7 @@ function checkNodeVersion(packageName) {
 
 function checkMicroName(appName) {
 
-  var dependencies = ['hapi', 'good', 'good-console', 'good-squeeze', 'pell-assistants'];
+  var dependencies = ['hapi', 'lab', 'good', 'good-console', 'good-squeeze', 'pell-assistants', 'pm2'];
   var devDependencies = ['eslint-config-hapi', 'eslint-plugin-hapi'];
   var allDependencies = dependencies.concat(devDependencies).sort();
 
