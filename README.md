@@ -2,7 +2,7 @@
 
 Create P2P based microservices with no configuration
 
-:warning: **Project at early stage. Some things may not be working as expected**
+:warning: **Project at early stage. Some things may not be working as expected** :warning:
 
 ## tl;dr
 
