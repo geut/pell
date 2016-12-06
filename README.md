@@ -26,7 +26,7 @@ npm start
 Install it once globally:
 
 ```sh
-npm install -g pell@create-microservice
+npm install https://github.com/geut/pell.git 
 ```
 
 **You’ll need to have Node >= 6 on your machine**.
