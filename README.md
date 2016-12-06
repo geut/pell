@@ -2,7 +2,7 @@
 
 Create P2P based microservices with no configuration
 
-:warning: **Project at early stage. Some things may not be working as expected**
+:warning: **Project at early stage. Some things may not be working as expected** :warning:
 
 ## tl;dr
 
@@ -23,10 +23,12 @@ npm start
 
 ### Installation
 
+**Package not available yet. You can `git clone` and `npm link` it**
+
 Install it once globally:
 
 ```sh
-npm install -g pell@create-microservice
+npm install geut@create-microservice
 ```
 
 **You’ll need to have Node >= 6 on your machine**.
