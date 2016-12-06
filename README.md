@@ -6,6 +6,8 @@ Create P2P based microservices with no configuration
 
 ## tl;dr
 
+__Package is not published yet. Below is the expected way of work/usage. You can still clone and `npm link`it.__
+
 ```sh
 npm install -g geut@create-microservice
 
