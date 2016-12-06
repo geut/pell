@@ -23,10 +23,12 @@ npm start
 
 ### Installation
 
+**Package not available yet. You can `git clone` and `npm link` it**
+
 Install it once globally:
 
 ```sh
-npm install https://github.com/geut/pell.git 
+npm install geut@create-microservice
 ```
 
 **You’ll need to have Node >= 6 on your machine**.
