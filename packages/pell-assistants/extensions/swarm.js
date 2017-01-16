@@ -1,3 +1,4 @@
+'use strict';
 // Create a p2p/dns-multicast swarm
 
 const SwarmFactory = require('discovery-swarm');
@@ -24,16 +25,17 @@ const Swarm = function (server, options = Internals.defaults, next){
 
     server.app.swarm = SwarmFactory(options);
     DetectPort(options.port, ( err, altPort ) => {
-
+        if (err){
+            throw new Error(err);
+        }
         let port = options.port;
         if (options.port !== altPort){
             console.log(`Port options.port is being used. Trying with: ${altPort}`);
             port = altPort;
         }
         server.app.swarm.listen(port);
+        next();
     });
-
-    next();
 };
 
 
