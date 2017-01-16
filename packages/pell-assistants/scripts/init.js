@@ -1,3 +1,5 @@
+'use strict';
+
 const Fs = require('fs-extra');
 const Path = require('path');
 const Spawn = require('cross-spawn');
@@ -7,7 +9,7 @@ const Chalk = require('chalk');
 const Internals = {};
 // TODO: start pm2 with a pm2 config file
 Internals.defaults = {
-    start: 'pm2 start server.js',
+    start: (serviceName) => `psy start -n ${serviceName} -- node server.js`,
     test: 'lab -t 85',
     coverage: 'lab -r html -o coverage.html'
 };
@@ -24,7 +26,7 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
 
     // Setup the script rules
     appPackage.scripts = {
-        'start': Internals.defaults.start,
+        'start': Internals.defaults.start(appName),
         'test': Internals.defaults.test,
         'coverage': Internals.defaults.coverage,
         'eject': 'pell-assistants eject'
@@ -56,7 +58,7 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
 
     // Rename gitignore after the fact to prevent npm from renaming it to .npmignore
     // See: https://github.com/npm/npm/issues/1862
-    Fs.move(Path.join(appPath, 'gitignore'), Path.join(appPath, '.gitignore'), [], function (err) {
+    Fs.move(Path.join(appPath, 'gitignore'), Path.join(appPath, '.gitignore'), [], (err) => {
         if (err) {
             // Append if there's already a `.gitignore` file there
             if (err.code === 'EEXIST') {
@@ -73,17 +75,17 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
     console.log('Installing dependencies from npm...');
     console.log();
     // TODO: having to do two npm installs is bad, can we avoid it?
-    var dependencies = ['hapi', 'lab', 'good', 'good-console', 'good-squeeze', 'pell-assistants', 'pm2'];
-    var args = [
+    const dependencies = ['hapi', 'lab', 'good', 'good-console', 'good-squeeze', 'pell-assistants', 'pm2'];
+    const args = [
         'install',
         '--save',
         verbose && '--verbose'
     ]
     .concat(dependencies)
-    .filter(function (e) { return e; });
+    .filter((e) => { return e; });
 
-    var proc = Spawn('npm', args, { stdio: 'inherit' });
-    proc.on('close', function (code) {
+    const proc = Spawn('npm', args, { stdio: 'inherit' });
+    proc.on('close', (code) => {
         if (code !== 0) {
             console.error('`npm ' + args.join(' ') + '` failed');
             return;
@@ -129,4 +131,3 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
         console.log('Happy hacking!');
     });
 };
-0
