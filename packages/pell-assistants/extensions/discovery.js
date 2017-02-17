@@ -1,5 +1,6 @@
 // discover dependent service using dht
 // after this process is ok service can operate.
+'use strict';
 
 const Crypto = require('crypto');
 const ReadPkgUp = require('read-pkg-up');
@@ -11,11 +12,11 @@ const Internals = {};
 
 Internals.defaults = {
     id: Crypto.createHash('sha1').update(Pkg.pell.name).digest().toString(),
-    healthChannel: Crypto.createHash('sha1').update('mservice:all:status:health:*').digest().toString(),
+    healthChannel: Crypto.createHash('sha1').update('first_aid:status:health:*').digest().toString(),
     depSet: new Set(),
     depMap: new Map(),
     discovered: new Map()
-}
+};
 
 const Discovery = function (server, options, next){
 

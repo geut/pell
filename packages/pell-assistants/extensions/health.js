@@ -1,5 +1,8 @@
 // provide a minimal api bridge for service health status.
 // This will be consumed for another service in order to know the whole network status.
+'use strict';
+
+const Os = require('os');
 const Process = require('process');
 const ReadPkgUp = require('read-pkg-up');
 const Pkg = ReadPkgUp.sync().pkg;
@@ -15,28 +18,42 @@ Internals.stats.pell = Pkg.pell;
 
 Internals.stats.pid = Process.pid;
 
-Internals.stats.cpuFirstCheck = Process.hrtime();
+Internals.CPUs = Os.cpus().length;
 
-Internals.stats.prevUsage = Process.cpuUsage();
+Internals.MILLIS = 1e3;
 
-Internals.stats.mem = () => Process.memoryUsage();
+Internals.MICRO = 1e6;
+
+Internals.stats.lastSampleTime = Process.uptime() * Internals.MILLIS;
+
+Internals.stats.prevUsage = undefined;
+
+Internals.stats.mem = () => {
+    const memStats = Process.memoryUsage();
+    memStats.currentSampleTime = Date.now();
+    return memStats;
+};
 
 Internals.stats.cpu = () => {
 
-    const secNSec2ms = function secNSec2ms(secNSec) {
-
-        return Math.round((secNSec[0] * 1000) + (secNSec[1] / 1000000));
-    };
-
-    const intervalTime = secNSec2ms(process.hrtime(Internals.stats.cpuFirstCheck));
+    const currentSampleTime = Date.now();
+    const elapsedUptime = (currentSampleTime - Internals.stats.lastSampleTime) / Internals.MILLIS;
+    const totalCpuTime = Internals.CPUs * elapsedUptime;
+    // update lastSampleTime
+    Internals.stats.lastSampleTime = currentSampleTime;
     const currentUsageDiff = Process.cpuUsage(Internals.stats.prevUsage);
+    // update prevCpuUsage
     Internals.stats.prevUsage = currentUsageDiff;
-    const userPercent = Number((((currentUsageDiff.user / 1000) / intervalTime) * 100).toFixed(2));
-    const systemPercent = Number((((currentUsageDiff.system / 1000) / intervalTime) * 100).toFixed(2));
-
+    const user = (currentUsageDiff.user / Internals.MICRO).toFixed(1);
+    const system = (currentUsageDiff.system / Internals.MICRO).toFixed(1);
+    const userUsage = (user / totalCpuTime).toFixed(1);
+    const systemUsage = (system / totalCpuTime).toFixed(1);
     return {
-        userPercent,
-        systemPercent
+        user,
+        userUsage,
+        system,
+        systemUsage,
+        currentSampleTime
     };
 };
 

@@ -33,11 +33,11 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
     };
 
     // Setup pell microservice metadata
-    // name is what this exposed to the world, same goes for deps
-    // name is required.
-    // name > mservice:company:offer
+    // name: indicates what is exposed to the world (aka other microservices)
+    // name is required metadata.
+    // You can see the name like: mservice:company|team:what-offers
     appPackage.pell = {
-        name: 'mservice:geut:world'
+        name: `${appName}:yourTeam:helloWorld`
     };
 
     // Update the pkg
