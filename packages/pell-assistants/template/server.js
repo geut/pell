@@ -54,7 +54,7 @@ Server.register([
         register: require('pell-assistants/extensions/discovery'),
         options: {
             id: Crypto.createHash('sha1').update(Pkg.pell.name).digest().toString(),
-            healthChannel: Crypto.createHash('sha1').update('mservice:all:status:health:*').digest().toString()
+            healthChannel: Crypto.createHash('sha1').update('first_aid:status:health:*').digest().toString()
         }
     },
     {

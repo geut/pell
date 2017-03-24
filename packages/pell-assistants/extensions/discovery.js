@@ -55,9 +55,8 @@ const Discovery = function (server, options, next){
         // channel -1---n- pellservice
         Object.keys(Pkg.pell.dependencies).forEach((key) => {
 
-            const dep = Pkg.pell.dependencies[key];
+            const hash = Pkg.pell.dependencies[key];
             console.log(`${Pkg.pell.name} dep key >> ${key}`);
-            const hash = dep;
             server.app.swarm.join(hash);
             console.log(`${Pkg.pell.name} :: requesting dep: ${hash.toString('hex')}`);
             Internals.defaults.depSet.add(new Buffer(hash).toString());
