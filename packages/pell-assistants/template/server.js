@@ -1,7 +1,6 @@
 'use strict';
 
 const Hapi = require('hapi');
-const Package = require('./package');
 const Good = require('good');
 const Crypto = require('crypto');
 const Pkg = require('./package.json');
@@ -11,8 +10,8 @@ const HapiConfig = {};
 
 HapiConfig.port = 3003;
 
-if (Package.pell.label){
-    HapiConfig.labels = [Package.pell.label];
+if (Pkg.pell.label){
+    HapiConfig.labels = [Pkg.pell.label];
 }
 
 Server.connection(HapiConfig);
