@@ -42,7 +42,7 @@ Server.register([
                 domain: (Pkg.pell.dns && Pkg.pell.dns.domain) ? Pkg.pell.dns.domain : ''
             },
             dht: {
-                bootstrap: ['localhost:20001']
+                bootstrap: [].concat(Pkg.pell.starter)
             },
             hash: false,
             port: 10002,
