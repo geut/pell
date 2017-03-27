@@ -12,6 +12,7 @@ const PathExists = require('path-exists');
  * Arguments:
  *   --version - to print current version
  *   --verbose - to print logs while init
+ *   --starter - to set the base nodes for the dht
  *   --assistants-version <alternative package>
  *     Example of valid values:
  *     - a specific npm version: "0.22.0-rc1"
@@ -24,14 +25,14 @@ if (commands.length === 0) {
     process.exit();
   }
   console.error(
-    'Usage: create-microservice <project-directory> [--verbose]'
+    'Usage: create-microservice <project-directory> [--verbose] [--starter]'
   );
   process.exit(1);
 }
 
-createMicro(commands[0], Argv.verbose, Argv['assistants-version']);
+createMicro(commands[0], Argv.verbose, Argv['assistants-version'], Argv['starter']);
 
-function createMicro(name, verbose, version) {
+function createMicro(name, verbose, version, starter) {
   var root = Path.resolve(name);
   var appName = Path.basename(root);
 
@@ -65,10 +66,10 @@ function createMicro(name, verbose, version) {
   console.log('Installing pell-assistants from npm...');
   console.log();
 
-  run(root, appName, version, verbose, originalDirectory);
+  run(root, appName, version, verbose, originalDirectory, starter);
 }
 
-function run(root, appName, version, verbose, originalDirectory) {
+function run(root, appName, version, verbose, originalDirectory, starter) {
   var installPackage = getInstallPackage(version);
   var packageName = getPackageName(installPackage);
   var args = [
@@ -95,7 +96,7 @@ function run(root, appName, version, verbose, originalDirectory) {
       'init.js'
     );
     var init = require(scriptsPath);
-    init(root, appName, verbose, originalDirectory);
+    init(root, appName, verbose, originalDirectory, starter);
   });
 }
 
@@ -150,7 +151,7 @@ function checkNodeVersion(packageName) {
 
 function checkMicroName(appName) {
 
-  var dependencies = ['hapi', 'lab', 'good', 'good-console', 'good-squeeze', 'pell-assistants', 'pm2'];
+  var dependencies = ['hapi', 'lab', 'good', 'good-console', 'good-squeeze', 'pell-assistants', 'psy'];
   var devDependencies = ['eslint-config-hapi', 'eslint-plugin-hapi'];
   var allDependencies = dependencies.concat(devDependencies).sort();
 
