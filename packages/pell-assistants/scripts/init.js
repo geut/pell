@@ -11,10 +11,11 @@ const Internals = {};
 Internals.defaults = {
     start: (serviceName) => `psy start -n ${serviceName} -- node server.js`,
     test: 'lab -t 85',
-    coverage: 'lab -r html -o coverage.html'
+    coverage: 'lab -r html -o coverage.html',
+    starter: ['localhost:20001']
 };
 
-module.exports = function (appPath, appName, verbose, originalDirectory) {
+module.exports = function (appPath, appName, verbose, originalDirectory, starter) {
 
     const ownPackageName = require(Path.join(__dirname, '..', 'package.json')).name;
     const ownPath = Path.join(appPath, 'node_modules', ownPackageName);
@@ -37,7 +38,8 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
     // name is required metadata.
     // You can see the name like: mservice:company|team:what-offers
     appPackage.pell = {
-        name: `${appName}:yourTeam:helloWorld`
+        name: `${appName}:yourTeam:helloWorld`,
+        starter: (starter) ? starter : Internals.defaults.starter
     };
 
     // Update the pkg
@@ -75,7 +77,7 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
     console.log('Installing dependencies from npm...');
     console.log();
     // TODO: having to do two npm installs is bad, can we avoid it?
-    const dependencies = ['hapi', 'lab', 'good', 'good-console', 'good-squeeze', 'pell-assistants', 'pm2'];
+    const dependencies = ['hapi', 'lab', 'good', 'good-console', 'good-squeeze', 'pell-assistants', 'psy'];
     const args = [
         'install',
         '--save',
@@ -104,6 +106,7 @@ module.exports = function (appPath, appName, verbose, originalDirectory) {
 
         console.log();
         console.log('Success! Microservice ' + appName + ' created at ' + appPath);
+        console.log('Microservices dht: ' + appPackage.pell.starter);
         console.log('Inside that directory, you can run several commands:');
         console.log();
         console.log(Chalk.cyan('  npm start'));
